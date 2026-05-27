@@ -84,6 +84,12 @@ function turfFunctions(map) {
   //
   // Documentation: https://turfjs.org/docs/api/centroid
   const parkCentroid = turf.centroid(myPolygon)
+
+  // force centroid visibility on top
+  if (!map.getPane('centroidPane')) {
+    map.createPane('centroidPane')
+    map.getPane('centroidPane').style.zIndex = 650
+  }
  
   // Style the centroid point as an orange circle marker to stand out
   L.geoJSON(parkCentroid, {
