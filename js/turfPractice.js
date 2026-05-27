@@ -1,14 +1,14 @@
 // turfPractice.js — Turf.js exercises (Lesson 6)
-
+ 
 function turfFunctions(map) {
-
+ 
   // Point 
   // Jakob Hurt statue in front of Vanemuise 46
   const pointCoords = [26.71552, 58.37393]
   const myPoint = turf.point(pointCoords)
   const geoJSON_point = L.geoJSON(myPoint)
   geoJSON_point.addTo(map)
-
+ 
   // LineString 
   // Walkways in the park
   const lineCoords = [
@@ -20,7 +20,7 @@ function turfFunctions(map) {
   ]
   const myLine = turf.lineString(lineCoords)
   L.geoJSON(myLine).addTo(map)
-
+ 
   // Polygon 
   // Park boundary 
   const polygonCoords = [[
@@ -39,44 +39,44 @@ function turfFunctions(map) {
   ]]
   const myPolygon = turf.polygon(polygonCoords)
   L.geoJSON(myPolygon).addTo(map)
-
+ 
   // Distance 
   // Second point: near the pond
   const pondCoords = [26.71489, 58.37439]
   const myPoint2 = turf.point(pondCoords)
   L.geoJSON(L.geoJSON(myPoint2)).addTo(map)
-
+ 
   const options = { units: 'meters' }
   const distance = turf.distance(myPoint, myPoint2, options)
   const distanceRounded = Math.round(distance * 100) / 100
   console.log(`Distance between statue and pond point: ${distanceRounded} meters`)
-
+ 
   // Area 
   const areaMeasurement = turf.area(myPolygon)
   const areaRounded = Math.round(areaMeasurement)
   console.log(`Park polygon area: ${areaRounded} square meters`)
-
+ 
   // Buffer 
   const statueBuffer = turf.buffer(myPoint, 20, { units: 'meters' })
   L.geoJSON(statueBuffer).addTo(map)
-
+ 
   const lineBuffer = turf.buffer(myLine, 5, { units: 'meters' })
    L.geoJSON(lineBuffer).addTo(map)   
-
+ 
   const parkBuffer = turf.buffer(myPolygon, 10, { units: 'meters' })
   L.geoJSON(parkBuffer).addTo(map)   
-
+ 
   const parkBufferNegative = turf.buffer(myPolygon, -10, { units: 'meters' })
    L.geoJSON(parkBufferNegative).addTo(map)   
-
+ 
   //  Envelope 
   const outerPoint = turf.point([26.71216, 58.37428])
   L.geoJSON(outerPoint).addTo(map)
-
+ 
   const features = turf.featureCollection([myPoint, outerPoint, myLine, myPolygon])
   const enveloped = turf.envelope(features)
   L.geoJSON(enveloped).addTo(map)
-
+ 
   //  NEW FUNCTION: turf.centroid 
   // turf.centroid computes the geometric centre of any GeoJSON feature or
   // feature collection. Here, I find the centroid of the park polygon and
@@ -84,7 +84,7 @@ function turfFunctions(map) {
   //
   // Documentation: https://turfjs.org/docs/api/centroid
   const parkCentroid = turf.centroid(myPolygon)
-
+ 
   // Style the centroid point as an orange circle marker to stand out
   L.geoJSON(parkCentroid, {
     pointToLayer: function(feature, latlng) {
@@ -95,15 +95,13 @@ function turfFunctions(map) {
         weight: 2,
         opacity: 1,
         fillOpacity: 0.9
-      })
+      }).bindPopup('Park centroid (turf.centroid)')
     }
-  })
-    .bindPopup('Park centroid (turf.centroid)')
-    .addTo(map)
-
+  }).addTo(map)
+ 
   const centroidCoords = parkCentroid.geometry.coordinates
   console.log(`Park centroid: lng=${centroidCoords[0].toFixed(5)}, lat=${centroidCoords[1].toFixed(5)}`)
   
 }
-
+ 
 export { turfFunctions }
